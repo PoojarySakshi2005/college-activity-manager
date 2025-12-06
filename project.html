@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>College Event Management</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #e8f6fb 0%, #f8f9fa 100%);
+      z-index: -1;
+    }
+
+    .top-right-nav {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .nav-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: white;
+      color: #444;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .nav-btn:hover { background: #eee; transform: scale(1.05); }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 300px;
+      z-index: 1;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .role-btn {
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: white;
+      color: #222;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+    }
+
+    .role-btn:hover { background: #eee; transform: scale(1.05); }
+
+    .info-text {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #444;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .top-right-nav { flex-direction: column; gap: 5px; top: 10px; right: 10px; }
+      .container { width: 90%; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button class="role-btn" onclick="location.href='project2.html'">Student</button>
+   <button class="role-btn" onclick="location.href='project1.html'">Teacher / Admin</button>
+
+    <div class="info-text">Manage Your College Events &amp; Budget</div>
+  </div>
+
+</body>
+</html>
