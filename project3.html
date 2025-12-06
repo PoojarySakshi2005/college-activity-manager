@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher/Admin Dashboard — Activity Manager</title>
+
+<style>
+    body{
+        margin:0;
+        font-family:Arial, sans-serif;
+        background:#f4f6f8;
+    }
+
+    /* Sidebar Theme (from your first code) */
+    .sidebar{
+        width:220px;
+        height:100vh;
+        background:#0b5fff;
+        color:white;
+        position:fixed;
+        left:0; top:0;
+        padding-top:20px;
+    }
+
+    .sidebar h2{
+        text-align:center;
+        margin-bottom:20px;
+        font-size:22px;
+    }
+
+    .sidebar a{
+        display:block;
+        padding:12px 20px;
+        color:white;
+        text-decoration:none;
+        margin:4px 0;
+        font-size:16px;
+        transition:0.2s;
+    }
+
+    .sidebar a:hover{
+        background:#003fb5;
+    }
+
+    /* Page Content */
+    .content{
+        margin-left:230px;
+        padding:25px;
+    }
+
+    .card{
+        background:white;
+        padding:20px;
+        border-radius:10px;
+        box-shadow:0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom:20px;
+    }
+
+    .dept-box{
+        display:flex;
+        gap:15px;
+    }
+
+    .dept-box div{
+        background:#eef2ff;
+        padding:15px;
+        border-radius:10px;
+        text-align:center;
+        width:120px;
+        cursor:pointer;
+        border:1px solid #c7d1ff;
+        transition:0.2s;
+    }
+
+    .dept-box div:hover{
+        background:#dbe3ff;
+    }
+
+    /* Activity items theme from your first code */
+    .activity-item{
+        background:#eef2ff;
+        padding:14px;
+        border-radius:8px;
+        margin:8px 0;
+        cursor:pointer;
+        border:1px solid #c7d1ff;
+        transition:0.2s;
+    }
+
+    .activity-item:hover{
+        background:#dbe3ff;
+    }
+
+    /* Budget Box */
+    .budget{
+        padding:15px;
+        background:#fff7d1;
+        border-left:5px solid #ffcc00;
+        border-radius:8px;
+        font-size:16px;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2>Activity Manager</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Department Activities</a>
+    <a href="#">Training & Placement</a>
+    <a href="#">Student Activities</a>
+    <a href="#">Achievements</a>
+    <a href="#">Other Activities</a>
+    <a href="#">Budget</a>
+    <a href="#">Logout</a>
+</div>
+
+<!-- Content Area -->
+<div class="content">
+    <h1>Teacher/Admin Dashboard</h1>
+
+    <!-- Department Activities -->
+    <div class="card">
+        <h2>Department Activities</h2>
+        <div class="dept-box">
+            <div>BCA</div>
+            <div>BCom</div>
+            <div>BMM</div>
+        </div>
+
+        <div class="activity-item">Add Department Activity</div>
+        <div class="activity-item">View All Activities</div>
+        <div class="activity-item">Upload Department Report</div>
+    </div>
+
+    <!-- Training & Placement -->
+    <div class="card">
+        <h2>Training & Placement</h2>
+        <div class="activity-item">Add Placement Drive</div>
+        <div class="activity-item">Add Training Session</div>
+        <p>Manage placement drives, seminars, training sessions, etc.</p>
+    </div>
+
+    <!-- Student Activities -->
+    <div class="card">
+        <h2>Student Activities</h2>
+        <div class="activity-item">Add Student Activity</div>
+        <div class="activity-item">View Activity Records</div>
+    </div>
+
+    <!-- Student Achievements -->
+    <div class="card">
+        <h2>Student Achievements</h2>
+        <div class="activity-item">Add Achievement</div>
+        <div class="activity-item">View Achievement List</div>
+    </div>
+
+    <!-- Other Activities -->
+    <div class="card">
+        <h2>Other Activities</h2>
+        <div class="activity-item">Workshop / Seminar</div>
+        <div class="activity-item">Guest Lecture</div>
+        <div class="activity-item">Industrial Visit</div>
+    </div>
+
+    <!-- Budget Section -->
+    <div class="card">
+        <h2>Budget</h2>
+        <div class="budget">
+            <strong>Budget → Events → Reports</strong>
+            <p>Track budget allocation and usage for all events.</p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
