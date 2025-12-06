@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Activity</title>
+    <style>
+        /* Adapted from Median Theme: Clean, modern styling with subtle colors and shadows */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            color: #222;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #444;
+            font-size: 15px;
+        }
+        #search {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px 40px;
+            background: #e8f6fb;
+            margin-bottom: 40px;
+        }
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            max-width: 380px;
+            margin-bottom: 20px;
+        }
+        .hero img {
+            width: 300px;
+            border-radius: 6px;
+        }
+        .hero button {
+            padding: 10px 20px;
+            background: black;
+            color: white;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        section {
+            padding: 0 40px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h2 {
+            font-size: 22px;
+            margin: 40px 0 20px;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .filters select, .filters input {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .card img {
+            width: 100%;
+            border-radius: 6px;
+        }
+        .card h3 {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .card button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: black;
+            color: white;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .club-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .club-item button {
+            padding: 8px 16px;
+            background: black;
+            color: white;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dashboard-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            border-top: 1px solid #eee;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero img {
+                width: 250px;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .filters {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">College Activity</div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#events">Events</a>
+            <a href="#clubs">Clubs</a>
+            <a href="#degrees">Degrees</a>
+            <a href="#dashboard">Dashboard</a>
+        </nav>
+        <input type="text" id="search" placeholder="Search events/clubs/degrees...">
+    </header>
+
+    <section id="home" class="hero">
+        <div>
+            <h1>Welcome to College Activities</h1>
+            <p>Discover events, join clubs,and stay engaged!</p>
+            <button onclick="scrollToSection('events')">Explore Events</button>
+        </div>
+        <img src="https://i.ytimg.com/vi/jsGXZJIE5mc/hqdefault.jpg"/>
+    </section>
+
+    <section id="events">
+        <h2>Upcoming Events</h2>
+        <div class="filters">
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="sports">Sports</option>
+                <option value="academic">Academic</option>
+                <option value="social">Social</option>
+            </select>
+            <input type="date" id="dateFilter">
+        </div>
+        <div id="eventsGrid" class="grid"></div>
+    </section>
+
+    <section id="clubs">
+        <h2>Clubs</h2>
+        <div id="clubsList" class="list"></div>
+    </section>
+
+    <section id="degrees">
+        <h2>Degree Programs</h2>
+        <div class="filters">
+            <select id="degreeFilter">
+                <option value="all">All Degrees</option>
+                <option value="bca">BCA</option>
+                <option value="bfa">BFA</option>
+                <option value="bba">BBA</option>
+                <option value="bcom">BCOM</option>
+                <option value="bma">BMA</option>
+            </select>
+        </div>
+        <div id="degreesGrid" class="grid"></div>
+    </section>
+
+    <section id="dashboard">
+        <h2>My Dashboard</h2>
+        <div class="dashboard-content">
+            <p>Logged in as: Student Name</p>
+            <ul>
+                <li>Upcoming: Debate (JAN 16)</li>
+                <li>Joined: Debate Club</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 College Activity. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Sample data
+        const events = [
+            { title: 'Sports', date: '2026-01-15', category: 'sports', location: 'Stadium', image:"https://marketplace.canva.com/WpYTg/MAEw4JWpYTg/1/tl/canva-various-sport-equipment-gear-MAEw4JWpYTg.jpg"},
+            { title: 'Dance', date: '2026-01-20', category: 'academic', location: 'Auditorium', image:"https://us.images.westend61.de/0001775589pw/a-modern-dance-girl-dancer-dancing-in-neon-light-doing-gymnastic-exercises-in-studio-copy-space-HPIF03411.jpg"},
+            { title: 'Debate', date: '2026-01-25', category: 'social', location: 'Class', image:"https://idebate.net/Illustrations/image-thumb__594__heroSliderImage/1_idebate.png"}
+        ];
+
+        const clubs = [
+            { name: 'Debate Club', description: 'Sharpen your argumentation skills.' },
+            { name: 'Sports Club', description: 'Stay active with various sports.' }
+        ];
+
+        const degrees = [
+            { title: 'Bachelor of Computer Applications (BCA)', category: 'bca', description: 'Focus on software development, programming, and IT skills.', image: 'https://via.placeholder.com/300x150?text=BCA' },
+            { title: 'Bachelor of Business Administration (BBA)', category: 'bba', description: 'Learn management, finance, and entrepreneurship.', image: 'https://via.placeholder.com/300x150?text=BBA' },
+            { title: 'Bachelor of Commerce (BCom)', category: 'bcom', description: 'Study accounting, economics, and commerce.', image: 'https://via.placeholder.com/300x150?text=BCom' },
+            { title: 'Bachelor of Fine Arts (BFA)', category: 'bfa', description: 'Explore visual arts, design, and creativity.', image: 'https://via.placeholder.com/300x150?text=BFA' },
+            { title: 'Bachelor of Music Arts (BMA)', category: 'bma', description: 'Dive into music theory, performance, and production.', image: 'https://via.placeholder.com/300x150?text=BMA' }
+        ];
+
+        // Load events
+        function loadEvents(filterCategory = 'all', filterDate = '') {
+            const grid = document.getElementById('eventsGrid');
+            grid.innerHTML = '';
+            events.filter(event => {
+                const matchesCategory = filterCategory === 'all' || event.category === filterCategory;
+                const matchesDate = !filterDate || event.date === filterDate;
+                return matchesCategory && matchesDate;
+            }).forEach(event => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${event.image}" alt="${event.title}">
+                    <h3>${event.title}</h3>
+                    <p>${event.date} • ${event.location}</p>
+                    <button onclick="alert('Registered for ${event.title}!')">Register</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Load clubs
+        function loadClubs() {
+            const list = document.getElementById('clubsList');
+            clubs.forEach(club => {
+                const item = document.createElement('div');
+                item.className = 'club-item';
+                item.innerHTML = `
+                    <div>
+                        <h3>${club.name}</h3>
+                        <p>${club.description}</p>
+                    </div>
+                    <button onclick="alert('Joined ${club.name}!')">Join</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // Load degrees
+        function loadDegrees(filterCategory = 'all') {
+            const grid = document.getElementById('degreesGrid');
+            grid.innerHTML = '';
+            degrees.filter(degree => filterCategory === 'all' || degree.category === filterCategory).forEach(degree => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${degree.image}" alt="${degree.title}">
+                    <h3>${degree.title}</h3>
+                    <p>${degree.description}</p>
+                    <button onclick="alert('Interested in ${degree.title}!')">Learn More</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            loadEvents(e.target.value, document.getElementById('dateFilter').value);
+        });
+        document.getElementById('dateFilter').addEventListener('change', (e) => {
+            loadEvents(document.getElementById('categoryFilter').value, e.target.value);
+        });
+        document.getElementById('degreeFilter').addEventListener('change', (e) => {
+            loadDegrees(e.target.value);
+        });
+        document.getElementById('search').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            // Search across events, clubs, and degrees
+            const filteredEvents = events.filter(event => event.title.toLowerCase().includes(query));
+            const filteredClubs = clubs.filter(club => club.name.toLowerCase().includes(query));
+            const filteredDegrees = degrees.filter(degree => degree.title.toLowerCase().includes(query));
+
+            // Update events grid
+            const eventsGrid = document.getElementById('eventsGrid');
+            eventsGrid.innerHTML = '';
+            filteredEvents.forEach(event => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${event.image}" alt="${event.title}">
+                    <h3>${event.title}</h3>
+                    <p>${event.date} • ${event.location}</p>
+                    <button onclick="alert('Registered for ${event.title}!')">Register</button>
+                `;
+                eventsGrid.appendChild(card);
+            });
+
+            // Update clubs list
+            const clubsList = document.getElementById('clubsList');
+            clubsList.innerHTML = '';
+            filteredClubs.forEach(club => {
+                const item = document.createElement('div');
+                item.className = 'club-item';
+                item.innerHTML = `
+                    <div>
+                        <h3>${club.name}</h3>
+                        <p>${club.description}</p>
+                    </div>
+                    <button onclick="alert('Joined ${club.name}!')">Join</button>
+                `;
+                clubsList.appendChild(item);
+            });
+
+            // Update degrees grid
+            const degreesGrid = document.getElementById('degreesGrid');
+            degreesGrid.innerHTML = '';
+            filteredDegrees.forEach(degree => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${degree.image}" alt="${degree.title}">
+                    <h3>${degree.title}</h3>
+                    <p>${degree.description}</p>
+                    <button onclick="alert('Interested in ${degree.title}!')">Learn More</button>
+                `;
+                degreesGrid.appendChild(card);
+            });
+        });
+
+        // Utility
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize
+        loadEvents();
+        loadClubs();
+        loadDegrees();
+    </script>
+</body>
+</html>
+
