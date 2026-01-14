@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Representative Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+    --corp-navy: #0f172a; 
+    --corp-accent: #dad5ffe7; 
+    --bg-silk: #f8fafc;
+    --border-thin: 1px solid #e2e8f0;
+    --sidebar-width: 280px;
+    --footer-navy: #001a35; 
+    --accent-blue: #3b82f6;
+    --popup-dark: #0f172a;
+    --gold-bg: #fffdf2;
+    --gold-border: #eab308;
+    --gold-text: #854d0e;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    background-color: var(--bg-silk);
+    color: #334155;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background: #ffffff; 
+    height: 75px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 0 40px; 
+    border-bottom: var(--border-thin);
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+}
+.logo img { height: 55px; width: auto; object-fit: contain; }
+
+.nav-welcome-text {
+    font-family: 'Montserrat', sans-serif; 
+    font-weight: 700; 
+    font-size: 18px;
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%);
+    white-space: nowrap;
+
+    /*Gradient color*/
+    background: linear-gradient(135deg, var(--corp-navy) 0%, var(--accent-blue) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.header-right { display: flex; align-items: center; gap: 20px; }
+
+.search-wrapper {
+    background: #f1f5f9; 
+    border: 1px solid #e2e8f0;
+    border-radius: 50px;
+    padding: 0 18px; 
+    display: flex; 
+    align-items: center; 
+    width: 240px;
+    height: 40px;
+    transition: all 0.3s ease;
+}
+
+.search-wrapper i {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.search-wrapper:focus-within {
+    background: #ffffff;
+    border-color: var(--accent-blue);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.search-wrapper input {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    margin-left: 10px;
+    color: #1e293b;
+}
+
+.search-wrapper input::placeholder {
+    color: #94a3b8;
+}
+
+.profile-trigger {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    cursor: pointer;
+    background: #0C2744;
+    padding: 8px 18px;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+}
+
+.profile-trigger i { 
+    font-size: 18px; 
+    color: #ffffffcf;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgb(255, 255, 255, 0.);
+    border-radius: 50%;
+}
+
+.profile-trigger span { 
+    font-weight: 600; 
+    font-size: 14px; 
+    color: #ffffff;
+ }
+
+.profile-trigger:hover {
+    transform: scale(1.05);
+    border-color: #0C2744;
+    box-shadow: 0 0 15px rgba(24, 108, 197, 0.76);
+}
+
+.layout-container { display: flex; flex: 1; }
+
+nav.left-nav {
+    width: var(--sidebar-width); 
+    background: var(--corp-navy); 
+    padding: 30px 15px;
+    display: flex; 
+    flex-direction: column; 
+    position: sticky; 
+    top: 75px; 
+    height: calc(100vh - 75px);
+    z-index: 999;
+}
+
+nav.left-nav ul { 
+    list-style: none; 
+    flex: 1;
+    overflow-y: auto;
+}
+
+nav.left-nav ul li {
+    padding: 14px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 12px; transition: 0.2s;
+    color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;
+}
+nav.left-nav ul li:hover { color: var(--corp-accent); background: rgba(255,255,255,0.05); }
+nav.left-nav ul li.active { background: var(--corp-accent); color: var(--corp-navy); }
+
+.logout-btn {
+    margin-top: auto; padding: 15px; color: #fca5a5; text-decoration: none;
+    font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.main-content { flex: 1; padding: 40px; overflow-x: hidden; }
+
+.fade-in-section {
+    animation: fadeInEffect 0.4s ease-out forwards;
+}
+
+@keyframes fadeInEffect {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero {
+    height: 350px; 
+    border-radius: 20px; 
+    padding: 45px; 
+    display: flex; 
+    align-items: center; 
+    color: #fff; 
+    margin-bottom: 50px;
+    background: radial-gradient(rgba(255, 255, 255, 0.2) 2%, transparent 3%),
+                linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(49, 34, 213, 0.592) 70%, rgba(15, 23, 42, 0.95) 100%), 
+                url("https://spndoshicollege.com/wp-content/uploads/2025/12/slide1A.jpg");
+    background-size: 35px 35px, cover, cover; 
+    background-position: center; 
+}
+
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.hero-text p.acedemic-box {
+    margin-bottom: 5px;;
+}
+
+.hero-text h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 45px;
+    font-weight: 800;
+    text-transform: uppercase;
+
+    /*Gradient text*/
+    background: linear-gradient(135deg, #ffffffe6 0%, var(--corp-accent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    
+
+    border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.hero-text p {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+
+    display: inline-block;
+    padding: 7px 20px;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    border: 0.1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.203);
+
+    margin-top: 0;
+
+    position: relative;
+}
+
+.hero-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    margin-top: 5px;
+    line-height: 1.6;
+    display: block;
+}
+
+.section-title {
+    font-family: 'Montserrat', sans-serif; font-size: 22px; color: var(--corp-navy); font-weight: 700;
+    margin: 40px 0 20px 0; border-bottom: 2px solid var(--corp-accent); padding-bottom: 10px; width: fit-content;
+}
+
+/* CAROUSEL LOGIC */
+.carousel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.display-grid { 
+    display: flex; 
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 25px; 
+    padding: 20px 10px;
+    width: 100%;
+    scrollbar-width: none;
+}
+.display-grid::-webkit-scrollbar { display: none; }
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--corp-navy);
+    transition: all 0.3s ease;
+}
+.nav-btn.is-visible { display: flex; }
+.nav-btn.prev { left: -20px; }
+.nav-btn.next { right: -20px; }
+
+nav.left-nav ul li {
+    padding: 14px 18px;
+    border-radius: 12px; /* Smoother corners */
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid transparent;
+    
+    background: transparent;
+}
+
+nav.left-nav ul li.active {
+    background: rgba(0,0,0,0.4) !important;
+
+    color: #ffffff !important;
+
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    backdrop-filter: none; /* The Frosted Glass Blur */
+    -webkit-backdrop-filter: none;
+
+}
+
+/* Glass effect on Hover */
+nav.left-nav ul li:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.03);
+    color: #fff;
+}
+
+nav.left-nav ul li.active i {
+    color: var(--accent-blue);
+}
+
+.result-card {
+    min-width: 350px;
+    width: 350;
+    flex: 0 0 auto;
+    background: #fff; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    border: var(--border-thin);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+    transition: all 0.3s ease;
+    display: flex; 
+    flex-direction: column; 
+    position: relative;
+}
+
+
+.result-card:hover { 
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    border-color: transparent !important;
+    outline: none;
+}
+
+.achievement-card { background: var(--gold-bg); border: 1px solid #fde68a; }
+.achievement-card:hover { border-color: var(--gold-border); box-shadow: 0 0 15px rgba(234, 179, 8, 0.4); }
+.achievement-card h3 { color: var(--gold-text) !important; }
+.achievement-card p i { color: var(--gold-border) !important; }
+
+.card-actions {
+    position: absolute; 
+    top: 10px; 
+    right: 10px; 
+    z-index: 10; 
+    display: flex; 
+    gap: 6px; 
+    opacity: 0; 
+    transition: 0.3s;
+    border: none !important;
+    outline: none !important;
+}
+.result-card:hover .card-actions { opacity: 1; }
+.action-btn {
+    background: #fff; border: none; width: 30px; height: 30px; border-radius: 6px; 
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); font-size: 14px;
+}
+.edit-btn { color: var(--corp-navy); }
+.delete-btn { color: #ef4444; }
+
+.budget-preview {
+    background: #f8fafc; 
+    border-radius: 8px; 
+    padding: 10px; 
+    margin-top: 10px;
+    font-style: italic; 
+    font-size: 12px; 
+    color: #475569; 
+    border-left: 3px solid var(--accent-blue);
+
+    display: -webkit-box; 
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical; 
+    overflow: hidden; 
+    line-height: 1.5;
+
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+#grid-activities .card-img-container,
+#grid-achievements .card-img-container,
+#grid-other .card-img-container,
+#grid-budget .card-img-container {
+    display: none !important;
+}
+
+.card-img-container { height: 170px; position: relative; background: #cbd5e1; cursor: pointer; overflow: hidden; }
+.card-img-container img, .card-img-container video { width: 100%; height: 100%; object-fit: cover; }
+.card-img-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 50%; background: linear-gradient(to top, white, transparent); }
+
+.card-badge {
+    position: absolute; top: 15px; left: 15px; padding: 4px 12px; border-radius: 20px;
+    font-size: 10px; font-weight: 800; color: white; background: var(--accent-blue);
+    text-transform: uppercase; z-index: 2;
+}
+
+.card-content { padding: 20px; flex-grow: 1; }
+.result-card h3 { color: var(--corp-navy); font-size: 18px; margin-bottom: 12px; font-weight: 700; line-height: 1.4; }
+.result-card p { font-size: 13px; color: #64748b; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.result-card p i { color: var(--accent-blue); width: 16px; text-align: center; }
+
+.card-footer { 
+    padding: 15px 20px; 
+    border-top: 1px solid #f1f5f9; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+.view-details-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 13px; background: none; border: none; cursor: pointer; padding: 0; }
+.card-arrow { color: var(--accent-blue); font-size: 16px; }
+
+/* Form Styles */
+.form-page { display: none; width: 100%; margin: 20px 0; }
+.form-header h2 { font-family: 'Montserrat', sans-serif; font-size: 24px; color: var(--corp-navy); margin-bottom: 6px; display: flex; align-items: center; gap: 12px; }
+.form-header p { font-size: 14px; color: #64748b; margin-bottom: 40px; }
+.form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px 20px; }
+.full-width { grid-column: span 3; }
+.form-group { display: flex; flex-direction: column; }
+.form-page label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--corp-navy); margin-bottom: 8px; letter-spacing: 1px; }
+.form-page input, .form-page select, .form-page textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+.form-button { background: var(--corp-navy); color: #fff; border: none; width: 250px; margin-top: 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; border-radius: 6px; padding: 16px; transition: 0.3s; }
+.form-button:hover { background: var(--corp-accent); color: var(--corp-navy); }
+
+/* Footer Styles */
+.original-footer { 
+    background-color: var(--footer-navy); 
+    color: white; 
+    padding: 35px 40px; 
+    margin-top: auto; 
+    position: relative;
+    z-index: 1001;
+}
+
+.footer-top { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+.footer-college-brand { display: flex; align-items: center; gap: 20px; }
+.footer-logo { width: 70px; height: 70px; object-fit: cover; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.4); }
+.footer-college-info h3 { font-family: 'Montserrat', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 2px; }
+.footer-college-info p { font-size: 13px; color: #cbd5e1; line-height: 1.4; }
+.footer-social { display: flex; gap: 15px; }
+.footer-social a { color: white; background: rgba(255, 255, 255, 0.1); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none; font-size: 18px; transition: all 0.3s ease; }
+.footer-social a:hover { background: var(--corp-accent); color: var(--corp-navy); transform: translateY(-3px); }
+.footer-divider { border-top: 1px solid rgba(255, 255, 255, 0.1); max-width: 1200px; margin: 20px auto 0; padding-top: 15px; text-align: center; }
+.footer-copyright-text { font-size: 11px; line-height: 1.5; color: #94a3b8; }
+
+/* BENTO MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
+    display: none; /* Controlled by JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+    padding: 20px; 
+}
+
+#profileEditModal .modal-content {
+    flex-direction: column; /* Profile stays vertical */
+    max-width: 450px;       /* Profile stays slim */
+    height: auto;           /* Profile adjusts to content */
+    padding: 30px;
+}
+
+.modal-content {
+    background: #0f172a;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-close { 
+    position: absolute; 
+    top: 20px; 
+    right: 25px; 
+    font-size: 24px; 
+    color: #ffffff; 
+    cursor: pointer; 
+    z-index: 3100; 
+    transition: 0.3s;
+    background: rgba(255,255,255,0.05); width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+}
+
+.modal-close:hover {
+    color: white;
+}
+
+.modal-left { 
+    flex: 1; background: #000; display: flex; align-items: center; 
+    justify-content: center; overflow: hidden; border-right: 1px solid rgba(255,255,255,0.1);
+}
+.modal-img, .modal-video { width: 100%; height: 100%; object-fit: contain; }
+
+.modal-right { 
+    flex: 1.2; padding: 40px; overflow-y: auto; 
+    display: flex; flex-direction: column; gap: 25px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    scrollbar-width: thin; scrollbar-color: #334155 transparent;
+}
+.modal-right::-webkit-scrollbar { width: 6px; }
+.modal-right::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+.modal-header-area h2 { font-size: 32px; font-family: 'Montserrat'; font-weight: 700; margin-bottom: 5px; }
+
+.modal-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+
+.modal-info-item { 
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); 
+    padding: 20px; border-radius: 16px; display: flex; flex-direction: column; gap: 12px;
+}
+.modal-info-item.full { grid-column: span 2; }
+
+.modal-info-item label { 
+    font-size: 10px; text-transform: uppercase; font-weight: 800; 
+    color: #64748b; letter-spacing: 1.5px; display: flex; align-items: center; gap: 10px;
+}
+.modal-info-item label i { color: #ffffff; font-size: 14px; }
+.modal-info-item span { font-size: 17px; font-weight: 600; color: #f1f5f9; line-height: 1.4; }
+
+.name-list-container { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+.participant-pill {
+    display: block; background: none; color: #fff; padding: 0; font-size: 15px; border: none; width: fit-content;
+}
+
+.show-more-btn {
+    background: rgba(255, 255, 255, 0.1); border: none; color: var(--accent-blue);
+    padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 700;
+    cursor: pointer; margin-top: 5px; transition: 0.2s;
+}
+
+.hidden-names { display: none; flex-direction: column; gap: 4px; }
+
+.modal-desc-box { 
+    margin-top: 20px;
+    padding: 20px; 
+    background: rgba(0,0,0,0.2); 
+    border-radius: 16px; 
+    border: 1px solid rgba(255,255,255,0.05); 
+}
+
+.modal-desc-box h4 { 
+    font-size: 11px; 
+    text-transform: uppercase; 
+    color: #64748b; 
+    margin-bottom: 10px; 
+    letter-spacing: 1px;
+}
+
+#modalDescription {
+    color: #cbd5e1;
+    line-height: 1.6;        /* Increases space between lines */
+    font-size: 0.95rem;
+    white-space: pre-wrap;   /* Crucial: Keeps your paragraphs and line breaks */
+    word-wrap: break-word;   /* Prevents long words from breaking the layout */
+}
+
+.modal-desc-box p { font-size: 14px; line-height: 1.6; color: #cbd5e1; white-space: pre-wrap; }
+
+.modal-content.full-text-mode .modal-left { display: none; }
+.modal-content.full-text-mode .modal-right { flex: 1; }
+
+/* This FORCES the gallery cards to be smaller */
+#grid-gallery .result-card {
+    min-width: 300px !important; /* Change this number to test */
+    width: 300px !important;
+    max-width: 300px !important;
+    height: 350px !important;
+    position: relative;
+    border: none;
+    background: #000;
+    display: flex;
+    flex-direction: column !important;
+
+    border-radius: 15px; /* Softer rounded corners */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy 3D transition */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2); /* Base shadow for depth */
+    overflow: hidden;
+    cursor: pointer;
+}
+
+#grid-gallery .result-card:hover {
+    transform: translateY(-10px) scale(1.02); /* Lifts the card up */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4); /* Deeper shadow when lifted */
+}
+
+#grid-gallery .result-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+    transform: skewX(-25deg);
+    transition: 0.7s;
+}
+
+#grid-gallery .result-card:hover::after {
+    left: 125%; /* Creates a light-sweep effect on hover */
+}
+
+/* Make sure the image inside adjusts too */
+#grid-gallery .card-img-container {
+    height: 100% !important;
+    width: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#grid-gallery .card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    padding: 15px;
+
+   background: linear-gradient(
+        to top, 
+        rgba(0, 0, 0, 0.9) 0%,    
+        rgba(0, 0, 0, 0.6) 60%,   
+        rgba(0, 0, 0, 0) 100%     
+    ) !important;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 40px !important;
+}
+
+/* Adjust text size so it doesn't break the small card */
+#grid-gallery .card-content h3 {
+    color: #ffffff !important;
+    font-size: 15px !important;
+    margin-bottom: 2px !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#grid-gallery .card-content p {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 11px !important;
+    font-weight: 400px;
+}
+
+#grid-gallery .card-footer {
+    display: flex !important;      /* Force it to show */
+    position: absolute !important; /* Pin it to the very bottom */
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    z-index: 5 !important;         /* Sit on top of everything */
+    padding: 10px 15px !important;
+}
+
+#grid-gallery .view-details-btn {
+    color: #b5c6e1 !important;        /* Pure white for visibility */
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8); /* Shadow to pop off the image */
+    cursor: pointer !important;
+    display: block !important;
+    transition: transform 0.3s ease, color 0.3s ease !important;
+    display: inline-block !important;
+}
+
+#grid-gallery .card-arrow {
+    color: #3b82f6 !important;
+}
+
+#grid-gallery .card-img-overlay {
+    display: none !important;
+}
+
+#grid-gallery .result-card:hover .card-content {
+    background: linear-gradient(
+        to top, 
+        rgba(0, 0, 0, 0.95) 0%, 
+        rgba(0, 0, 0, 0.7) 50%, 
+        transparent 100%
+    ) !important;
+}
+
+#grid-gallery .view-details-btn:hover {
+    transform: scale(1.15); /* Zooms the text in by 15% */
+    color: #ffffff !important; /* brightens text on hover */
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.8); /* adds a blue glow */
+}
+
+/* Optional: Zoom the arrow icon too when the button is hovered */
+#grid-gallery .view-details-btn:hover + .card-arrow {
+    transform: translateX(5px) scale(1.2);
+    transition: 0.3s ease;
+}
+
+.modal-resize {
+    position: absolute;
+    top: 20px;
+    right: 75px;
+    font-size: 18px;
+    color: #ffffff; 
+    cursor: pointer;
+    z-index: 3100;
+    background: rgba(255, 255, 255, 0.1);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: 0.3;
+}
+
+.modal-resize:hover {
+    background: var(--accent-blue);
+}
+
+/* This expands the modal but keeps the layout consistent */
+.modal-content.is-large {
+    width: 98vw !important;
+    height: 95vh !important;
+    max-width: none !important;
+}
+
+/* This makes ONLY the media container grow */
+.modal-content.is-large .modal-left {
+    flex: 3; /* Significantly increases the image/video area */
+    background: #000;
+}
+
+/* This keeps the text area from stretching too much */
+.modal-content.is-large .modal-right {
+    flex: 1; 
+    max-width: 400px; /* Limits the description width so it stays readable */
+}
+
+/* Ensures the image/video fills the new larger space */
+.modal-content.is-large .modal-img, 
+.modal-content.is-large .modal-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Keeps the file from being cropped */
+}
+
+.empty-placeholder {
+    width: 100%;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    color: #94a3b8;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    margin: 10px 0;
+}
+
+.empty-placeholder i {
+    font-size: 32px;
+    opacity: 0.5;
+}
+
+.empty-placeholder span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pdf-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent-blue);
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 8px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    transition: 0.3s;
+}
+
+.pdf-link-btn:hover {
+    background: var(--accent-blue);
+    color: white;
+}
+
+
+/* ================= PROFILE SECTION ================= */
+/* Container for the profile */
+.profile-section {
+    padding: 10px 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* The Avatar box */
+.profile-avatar-container {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 15px;
+}
+
+.profile-avatar, .avatar-icon-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent-blue);
+    background: rgba(255,255,255,0.05);
+}
+
+.avatar-icon-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: rgba(255,255,255,0.2);
+}
+
+.profile-avatar-edit, .profile-avatar-upload {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: var(--accent-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    border: 2px solid var(--corp-navy);
+    transition: transform 0.2s;
+}
+
+.profile-avatar-edit { 
+    bottom: 0; 
+    left: -5px; 
+    background: var(--accent-blue); 
+}
+
+.profile-avatar-upload { 
+    bottom: 0; 
+    right: -5px; 
+}
+
+.profile-avatar-edit:hover, .profile-avatar-upload:hover { 
+    transform: scale(1.1); 
+}
+
+#displayProfileName {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#displayProfileEmail {
+    color: rgba(255,255,255,0.5); /* Dull white color */
+    font-size: 13px;
+    font-weight: 400;
+}
+
+
+
+/* Enhanced Profile Modal */
+
+.profile-modal-box {
+    position: relative;
+    background: #0f172a;
+    padding: 40px;
+    border-radius: 24px;
+    width: 95%;
+    max-width: 480px; /* Small for profile */
+    margin: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 5100;
+}
+
+.profile-close-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.profile-modal-content {
+    position: relative; /* This keeps the X anchored inside this box */
+    background: #0f172a;
+    padding: 40px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.profile-modal-close:hover {
+    color: white;
+}
+
+/* Decorative background glow */
+.profile-modal-content::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 150px;
+    height: 150px;
+    background: #3b82f6;
+    filter: blur(70px);
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.modal-header-area {
+    margin-bottom: 20px;
+}
+
+.modal-header-area h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* Input Styling */
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.input-group i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.enhanced-input {
+    width: 100%;
+    background: rgba(30, 41, 59, 0.5) !important;
+    border: 1px solid #334155 !important;
+    padding: 12px 16px 12px 48px !important;
+    border-radius: 12px !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.enhanced-input:focus {
+    border-color: #3b82f6 !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    outline: none;
+}
+
+.enhanced-input:focus + i {
+    color: #3b82f6;
+}
+
+/* Save Button */
+.save-profile-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.save-profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+}
+
+
+</style>
+</head>
+<body>
+
+
+
+<header>
+    <div class="logo"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFEcTSwc_-wQ_jCbNESFhDF5ov6SLZqIwQNg&s" alt="Logo"></div>
+    <div class="nav-welcome-text"> Welcome to the Student Representative Portal!</div>
+    <div class="header-right">
+        <div class="search-wrapper"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="dashboardSearch" placeholder="Search archive..." onkeyup="filterCards()"></div>
+        <div class="profile-trigger">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </div>
+</header>
+
+<div class="layout-container">
+    <nav class="left-nav">
+        <div class="profile-section">
+    <div class="profile-avatar-container">
+        <div id="avatarPlaceholder" class="avatar-icon-placeholder">
+            <i class="fa-solid fa-user"></i>
+        </div>
+        
+        <img src="" id="profileAvatarDisplay" class="profile-avatar" style="display: none;">
+        
+        <div class="profile-avatar-edit" onclick="openProfilePopup()" title="Edit Details">
+            <i class="fa-solid fa-pen"></i>
+        </div>
+        <div class="profile-avatar-upload" onclick="document.getElementById('profilePhotoInput').click()" title="Change Photo">
+            <i class="fa-solid fa-camera"></i>
+        </div>
+        
+        <input type="file" id="profilePhotoInput" style="display:none" onchange="uploadProfileImage(this)" accept="image/*">
+    </div>
+
+    <div class="profile-info-text">
+        <h3 id="displayProfileName">Student Name</h3>
+        <p id="displayProfileEmail">student@example.com</p>
+        <span id="displayProfileClass" style="display:none">Year 1</span>
+        <span id="displayProfileRoll" style="display:none">00</span>
+    </div>
+</div>
+        <ul>
+            <li class="active" data-section="home"><i class="fa-solid fa-gauge-high"></i> Home</li>
+            <li data-section="events"><i class="fa-regular fa-calendar"></i> Events</li>
+            <li data-section="studentActivities"><i class="fa-solid fa-user-clock"></i> Student's Activities</li>
+            <li data-section="studentAchievements"><i class="fa-solid fa-trophy"></i> Student's Achievements</li>
+            <li data-section="otherActivities"><i class="fa-solid fa-shapes"></i> Other Activities</li>
+            <li data-section="gallery"><i class="fa-regular fa-images"></i> Gallery</li>
+            <li data-section="videos"><i class="fa-regular fa-circle-play"></i> Videos</li>
+            <li data-section="budget"><i class="fa-solid fa-file-invoice"></i> Budget</li>
+        </ul>
+        <a href="#" class="logout-btn"><i class="fa-solid fa-power-off"></i> Logout</a>
+    </nav>
+
+    <main class="main-content">
+        <div id="homeSection" class="fade-in-section">
+            <div class="hero">
+                <div class="hero-text">
+                    <p class="acedemic-box">Academic Year 2025-26</p>
+                    <h1>Student<br> Representative</h1>
+                    <div class="hero-description">Dedicated to enhancing the student experience through transparent records and effective representation</div>
+                </div></div>
+            
+            <div class="section-title">Upcoming Events</div>
+            <div class="carousel-container">
+                <button class="nav-btn prev" onclick="scrollGrid('grid-events', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="display-grid" id="grid-events">
+                    <div class="empty-placeholder">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <span>No events added yet.</span>
+                    </div>
+                </div>
+                <button class="nav-btn next" onclick="scrollGrid('grid-events', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="section-title">Student Activities</div>
+            <div class="carousel-container">
+                <button class="nav-btn prev" onclick="scrollGrid('grid-activities', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="display-grid" id="grid-activities">
+                    <div class="empty-placeholder">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <span>No records added yet.</span>
+                    </div>
+                </div>
+                <button class="nav-btn next" onclick="scrollGrid('grid-activities', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="section-title">Student Achievements</div>
+            <div class="carousel-container">
+                <button class="nav-btn prev" onclick="scrollGrid('grid-achievements', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="display-grid" id="grid-achievements">
+                    <div class="empty-placeholder">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <span>No records added yet.</span>
+                    </div>
+                </div>
+                <button class="nav-btn next" onclick="scrollGrid('grid-achievements', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="section-title">Other Activities</div>
+            <div class="carousel-container">
+                <button class="nav-btn prev" onclick="scrollGrid('grid-other', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="display-grid" id="grid-other">
+                    <div class="empty-placeholder">
+                        <i class="fa-regular fa-folder-open"></i>
+                         <span>No records added yet.</span>
+                    </div>
+                </div>
+                <button class="nav-btn next" onclick="scrollGrid('grid-other', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="section-title">Gallery</div>
+            <div class="carousel-container">
+                <button class="nav-btn prev" onclick="scrollGrid('grid-gallery', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="display-grid" id="grid-gallery">
+                    <div class="empty-placeholder">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <span>No photos added yet.</span>
+                    </div>
+                </div>
+                <button class="nav-btn next" onclick="scrollGrid('grid-gallery', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="section-title">Videos</div>
+            <div class="carousel-container">
+                <button class="nav-btn prev" onclick="scrollGrid('grid-videos', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="display-grid" id="grid-videos">
+                    <div class="empty-placeholder">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <span>No videos added yet.</span>
+                    </div>
+                </div>
+                <button class="nav-btn next" onclick="scrollGrid('grid-videos', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div class="section-title">Budget Records</div>
+            <div class="carousel-container">
+                <button class="nav-btn prev" onclick="scrollGrid('grid-budget', -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="display-grid" id="grid-budget">
+                    <div class="empty-placeholder">
+                        <i class="fa-regular fa-folder-open"></i>
+                        <span>No records added yet.</span>
+                    </div>
+                </div>
+                <button class="nav-btn next" onclick="scrollGrid('grid-budget', 1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="form-page" id="eventsFormPage">
+            <div class="form-header"><h2><i class="fa-regular fa-calendar"></i> Add Event</h2><p>Register official college-level events and seminars here.</p></div>
+            <form id="eventsForm"><div class="form-grid">
+                <div class="form-group"><label>Event Name</label><input type="text" id="evName" placeholder="e.g., Annual Tech Symposium" required></div>
+                <div class="form-group"><label>Organizer</label><input type="text" id="evOrg" placeholder="e.g., Department of BCA" required></div>
+                <div class="form-group"><label>Event Date</label><input type="date" id="evDate" required></div>
+                <div class="form-group"><label>Venue</label><input type="text" id="evVenue" placeholder="e.g., Main Auditorium" required></div>
+                <div class="form-group"><label>Event Type</label><select id="evBadge"><option value="" disabled selected>Select Type</option><option>Workshop</option><option>Seminar</option><option>Technical</option><option>Cultural</option></select></div>
+                <div class="form-group"><label>Upload Event Poster</label><input type="file" id="evImg" accept="image/*"></div>
+                <div class="form-group full-width"><label>Description / Additional Info</label><textarea id="evDesc" rows="3" placeholder="Add Event name:
+
+Description:"></textarea></div>
+            </div><button type="submit" class="form-button">Add Event</button></form>
+        </div>
+
+        <div class="form-page" id="studentActivitiesFormPage">
+            <div class="form-header"><h2><i class="fa-solid fa-user-clock"></i> Student's Activities</h2><p>Log student participation in workshops, camps, or seminars.</p></div>
+            <form id="studentActivitiesForm"><div class="form-grid">
+                <div class="form-group full-width"><label>Student Names</label><textarea id="saNames" rows="3" placeholder="Enter student names (one per line)..." required></textarea></div>
+                <div class="form-group"><label>Class/Year</label><input type="text" id="saClass" placeholder="e.g., TYBCA" required></div>
+                <div class="form-group"><label>Activity Name</label><input type="text" id="saActivity" placeholder="e.g., NSS Winter Camp" required></div>
+                <div class="form-group"><label>Activity Type</label><select id="saType"><option>Competition</option><option>Camp</option><option>Workshop</option></select></div>
+                <div class="form-group"><label>Participation Type</label><select id="saPartType"><option value="Individual">Individual</option><option value="Group">Group</option></select></div>
+                <div class="form-group"><label>Organizing Body</label><input type="text" id="saOrg" placeholder="e.g., Department" required></div>
+                <div class="form-group"><label>Venue</label><input type="text" id="saVenue" placeholder="e.g., College Grounds" required></div>
+                <div class="form-group"><label>Start Date</label><input type="date" id="saStart" required></div>
+                <div class="form-group"><label>End Date</label><input type="date" id="saEnd" required></div>
+            </div><button type="submit" class="form-button">Add Activity</button></form>
+        </div>
+
+        <div class="form-page" id="studentAchievementsFormPage">
+            <div class="form-header"><h2><i class="fa-solid fa-trophy"></i> Student's Achievements</h2><p>Record awards, prizes, and recognitions.</p></div>
+            <form id="studentAchievementsForm"><div class="form-grid">
+                <div class="form-group"><label>Student Names</label><input type="text" id="shNames" placeholder="e.g., Sneha Suvarna" required></div>
+                <div class="form-group"><label>Class/Year</label><input type="text" id="shClass" placeholder="e.g., TYBCA" required></div>
+                <div class="form-group"><label>Event/Competition Name</label><input type="text" id="shEvent" placeholder="e.g., Inter-College Debate" required></div>
+                <div class="form-group"><label>Prize/Position</label><input type="text" id="shPrize" placeholder="e.g., 1st Prize" required></div>
+                <div class="form-group"><label>Level</label><select id="shLevel"><option>College</option><option>University</option><option>State</option><option>National</option></select></div>
+                <div class="form-group"><label>Organizing Body</label><input type="text" id="shOrg" placeholder="e.g., Infomaniac Club" required></div>
+                <div class="form-group"><label>Venue</label><input type="text" id="shVenue" placeholder="e.g., B-208 Lab" required></div>
+                <div class="form-group"><label>Date</label><input type="text" id="shDate" placeholder="e.g., 12th Jan 2025" required></div>
+                <div class="form-group"><label>Certificate Document (PDF)</label><input type="file" id="shPdf" accept="application/pdf"></div>
+            </div><button type="submit" class="form-button">Add Achievement</button></form>
+        </div>
+
+        <div class="form-page" id="otherActivitiesFormPage">
+            <div class="form-header"><h2><i class="fa-solid fa-shapes"></i> Other Activities</h2><p>Sports, Magazine, and Departmental roles.</p></div>
+            <form id="otherActivitiesForm"><div class="form-grid">
+                <div class="form-group full-width"><label>Participant Names</label><textarea id="oaNames" rows="3" placeholder="Enter names of participants..." required></textarea></div>
+                <div class="form-group"><label>Class/Role</label><input type="text" id="oaRole" placeholder="e.g., Editor / Captain" required></div>
+                <div class="form-group"><label>Activity Category</label><select id="oaType"><option>Camp</option><option>Magazine</option><option>Sports</option><option>Workshop</option></select></div>
+                <div class="form-group"><label>Activity Name</label><input type="text" id="oaActivity" placeholder="e.g., Annual Sports Meet" required></div>
+                <div class="form-group"><label>Organizing Body</label><input type="text" id="oaOrg" placeholder="e.g., Sports Committee" required></div>
+                <div class="form-group"><label>Venue</label><input type="text" id="oaVenue" placeholder="e.g., College Gymkhana" required></div>
+                <div class="form-group"><label>Start Date</label><input type="date" id="oaStart" required></div>
+                <div class="form-group"><label>End Date</label><input type="date" id="oaEnd" required></div>
+            </div><button type="submit" class="form-button">Add Activity</button></form>
+        </div>
+
+        <div class="form-page" id="galleryFormPage">
+            <div class="form-header"><h2><i class="fa-regular fa-images"></i> Add Photo</h2><p>Archive event photography.</p></div>
+            <form id="galleryForm"><div class="form-grid">
+                <div class="form-group"><label>Photo Title</label><input type="text" id="galTitle" placeholder="e.g., Convocation 2025" required></div>
+                <div class="form-group"><label>Date Captured</label><input type="date" id="galDate" required></div>
+                <div class="form-group"><label>Upload Image</label><input type="file" id="galImg" accept="image/*"></div>
+                <div class="form-group full-width"><label>Caption</label><textarea id="galDesc" rows="3" placeholder="Add the photo title:
+
+Description:                    "></textarea></div>
+            </div><button type="submit" class="form-button">Save Photo</button></form>
+        </div>
+
+        <div class="form-page" id="videosFormPage">
+            <div class="form-header"><h2><i class="fa-regular fa-circle-play"></i> Add Video Recording</h2><p>Archive college program highlights.</p></div>
+            <form id="videosForm"><div class="form-grid">
+                <div class="form-group"><label>Video Title</label><input type="text" id="vidTitle" placeholder="e.g., Dance Competition Clip" required></div>
+                <div class="form-group"><label>Recording Date</label><input type="date" id="vidDate" required></div>
+                <div class="form-group"><label>Video File</label><input type="file" id="vidFile" accept="video/*"></div>
+                <div class="form-group full-width"><label>Short Description</label><textarea id="vidDesc" rows="3" placeholder="Add the video title:
+
+Description:                    "></textarea></div>
+            </div><button type="submit" class="form-button">Upload Video</button></form>
+        </div>
+
+        <div class="form-page" id="budgetFormPage">
+            <div class="form-header"><h2><i class="fa-solid fa-file-invoice"></i> Add Budget Record</h2><p>Transparency log for expenditures.</p></div>
+            <form id="budgetForm"><div class="form-grid">
+                <div class="form-group"><label>Event Name</label><input type="text" id="budName" placeholder="e.g., Zesto" required></div>
+                <div class="form-group"><label>Total Amount (₹)</label><input type="number" id="budAmt" placeholder="e.g., 5000" required></div>
+                <div class="form-group"><label>Billing Date</label><input type="date" id="budDate" required></div>
+                <div class="form-group full-width"><label>Expenditure Details</label><textarea id="budDesc" rows="3" placeholder="For Example: 
+
+Dear Ma'am,
+
+The following budget is required for the smooth and successful conduct of the Annual Day Celebration:
+
+1．Stage decoration & backdrop – ₹18,000
+2．Sound system & lighting – ₹15,000
+3．Costumes & performance props – ₹12,000
+4．Certificates, trophies & mementos – ₹8,000
+5．Refreshments – ₹10,000
+6．Photography & videography – ₹7,000
+7．Printing & stationery – ₹5,000
+8．Miscellaneous expenses – ₹5,000
+
+Total Estimated Budget: ₹80,000
+
+Kindly grant approval for the above-mentioned budget." required></textarea></div>
+            </div><button type="submit" class="form-button">Send for Approval</button></form>
+        </div>
+    </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content" id="modalContent">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        
+        <div class="modal-resize" id="modalResizeBtn" onclick="toggleModalSize()">
+            <i class="fa-solid fa-expand"></i>
+        </div>
+
+        <div class="modal-left">
+            <img id="modalImg" class="modal-img" src="" alt="Poster">
+            <video id="modalVideo" class="modal-video" controls></video>
+        </div>
+
+        <div class="modal-right">
+            <div class="modal-header-area">
+                <h2 id="modalTitle" style="color: white;"></h2>
+            </div>
+            <div id="modalDetails" class="modal-info-grid">
+                </div>
+            <div class="modal-desc-box" id="descriptionContainer">
+                <h4>Description</h4>
+                <p id="modalDescription"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="original-footer">
+    <div class="footer-top">
+        <div class="footer-college-brand">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFEcTSwc_-wQ_jCbNESFhDF5ov6SLZqIwQNg&s" class="footer-logo" alt="Logo">
+            <div class="footer-college-info">
+                <h3>SMT.P.N. Doshi Women's College</h3>
+                <h4>An Autonomous Institution</h4>
+                <p>Ghatkopar (West), Mumbai - 400086<br>Accredited "A" grade by NAAC</p>
+            </div>
+        </div>
+        <div class="footer-social">
+            <a href="https://spndoshicollege.com/" target="_blank"><i class="fa-solid fa-globe"></i></a>
+            <a href="https://www.facebook.com/people/SPNDoshi-Womens-College/100057341474027/#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/smt.p.n.doshicollege/?utm_medium=copy_link" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.youtube.com/@smt.p.n.doshiwomenscollege9744" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+    </div>
+    <div class="footer-divider">
+        <div class="footer-copyright-text">
+            Designed as part of BCA Semester Project – Activity Manager with Budget Tracker.<br>
+            © 2025 SMT.P.N. Doshi Women's College. All Rights Reserved.
+        </div>
+    </div>
+</footer>
+
+<script>
+let currentEditingCardId = null;
+
+// Icons for the popup window
+const fieldIcons = {
+    "organizer": "fa-building-columns", 
+    "venue": "fa-location-dot", 
+    "date": "fa-calendar-day",
+    "start date": "fa-calendar-plus", 
+    "end date": "fa-calendar-check", 
+    "type": "fa-tag",
+    "class/year": "fa-graduation-cap", 
+    "competition": "fa-medal", 
+    "level": "fa-layer-group",
+    "amount": "fa-indian-rupee-sign", 
+    "students": "fa-users", 
+    "participants": "fa-users",
+    "winner": "fa-trophy", 
+    "role": "fa-user-tie", 
+    "category": "fa-shapes"
+};
+
+const navItems = document.querySelectorAll("nav.left-nav ul li");
+const pages = { 
+    "home": "homeSection", "events": "eventsFormPage", "studentActivities": "studentActivitiesFormPage", 
+    "studentAchievements": "studentAchievementsFormPage", "otherActivities": "otherActivitiesFormPage", 
+    "gallery": "galleryFormPage", "videos": "videosFormPage", "budget": "budgetFormPage" 
+};
+
+navItems.forEach(item => {
+    item.addEventListener("click", () => {
+        navItems.forEach(i => i.classList.remove("active")); item.classList.add("active");
+        const targetId = pages[item.dataset.section];
+        document.querySelectorAll('.form-page, #homeSection').forEach(el => el.style.display = 'none');
+        const targetElement = document.getElementById(targetId);
+        if(targetElement) { targetElement.style.display = "block"; targetElement.classList.add('fade-in-section'); }
+        
+        if (item.dataset.section !== 'home') {
+            if (!currentEditingCardId) {
+                document.querySelectorAll('form').forEach(f => {
+                    f.reset();
+                    const btn = f.querySelector('button[type="submit"]');
+                    if(btn) btn.innerText = btn.innerText.replace('Update', 'Add').replace('Save', 'Add').replace('Submit', 'Add');
+                });
+            }
+        } else {
+            currentEditingCardId = null; 
+            document.querySelectorAll('.display-grid').forEach(g => updateNavButtons(g.id));
+        }
+        window.scrollTo(0,0); 
+    });
+});
+
+/* CAROUSEL LOGIC */
+function updateNavButtons(gridId) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    const container = grid.parentElement;
+    const prevBtn = container.querySelector('.prev');
+    const nextBtn = container.querySelector('.next');
+
+    if (grid.scrollLeft > 10) prevBtn.classList.add('is-visible');
+    else prevBtn.classList.remove('is-visible');
+
+    const hasMore = grid.scrollWidth > (grid.scrollLeft + grid.clientWidth + 10);
+    if (hasMore) nextBtn.classList.add('is-visible');
+    else nextBtn.classList.remove('is-visible');
+}
+
+function scrollGrid(gridId, direction) {
+    const grid = document.getElementById(gridId);
+    const scrollAmount = 345; 
+    grid.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    setTimeout(() => updateNavButtons(gridId), 400);
+}
+
+document.querySelectorAll('.display-grid').forEach(grid => {
+    grid.addEventListener('scroll', () => updateNavButtons(grid.id));
+});
+
+/* MODAL / POSTER LOGIC */
+function openFullPoster(title, mediaSrc, isVideo, details, description) {
+    const modal = document.getElementById('modalOverlay');
+    const resizeBtn = document.getElementById('modalResizeBtn');
+    
+    // 1. Handle Resize Button Visibility
+    if (resizeBtn) {
+        resizeBtn.style.display = (mediaSrc && mediaSrc.trim() !== "") ? 'flex' : 'none';
+    }
+
+    const modalImg = document.getElementById('modalImg');
+    const modalVideo = document.getElementById('modalVideo');
+    const modalContent = document.getElementById('modalContent');
+
+    // 2. Handle Media (Image vs Video)
+    if (!mediaSrc) {
+        modalContent.classList.add('full-text-mode');
+        modalImg.style.display = 'none';
+        modalVideo.style.display = 'none';
+    } else {
+        modalContent.classList.remove('full-text-mode');
+        if (isVideo) {
+            modalVideo.src = mediaSrc;
+            modalVideo.style.display = 'block';
+            modalImg.style.display = 'none';
+        } else {
+            modalImg.src = mediaSrc;
+            modalImg.style.display = 'block';
+            modalVideo.style.display = 'none';
+        }
+    }
+
+    // 3. Set Title
+    document.getElementById('modalTitle').innerText = title;
+
+    // 4. Fill Details Grid (Certificates, Participants, etc.)
+    const grid = document.getElementById('modalDetails');
+    grid.innerHTML = "";
+
+    for (const [key, val] of Object.entries(details)) {
+        if (val) {
+            const item = document.createElement('div');
+            if (key === "Certificate") {
+                item.className = "modal-info-item full";
+                item.innerHTML = `<label><i class="fa-solid fa-file-pdf"></i> ${key}</label><a href="${val}" target="_blank" class="pdf-link-btn"><i class="fa-solid fa-file-arrow-down"></i> View / Download Certificate</a>`;
+            } else if (key === "Participants" || key === "Students") {
+                item.className = "modal-info-item full";
+                const names = val.split('\n').filter(n => n.trim() !== "");
+                let namesHTML = `<label><i class="fa-solid fa-users"></i> ${key}</label><div class="name-list-container">`;
+                names.slice(0, 5).forEach(n => { namesHTML += `<span class="participant-pill">${n}</span>`; });
+                if (names.length > 5) {
+                    namesHTML += `<div class="hidden-names">`;
+                    names.slice(5).forEach(n => { namesHTML += `<span class="participant-pill">${n}</span>`; });
+                    namesHTML += `</div><button class="show-more-btn" onclick="toggleNames(this)">+ Show ${names.length - 5} More</button>`;
+                }
+                namesHTML += `</div>`;
+                item.innerHTML = namesHTML;
+            } else {
+                item.className = "modal-info-item";
+                item.innerHTML = `<label>${key}</label><span>${val}</span>`;
+            }
+            grid.appendChild(item);
+        }
+    }
+
+    // 5. SET DESCRIPTION (The fix for the duplicate/layout issue)
+    const descElement = document.getElementById('modalDescription');
+    if (description) {
+        // We set the innerText to preserve your line breaks and avoid the "one long line" issue
+        descElement.innerText = description;
+        // Make sure the parent container is visible
+        descElement.parentElement.style.display = "block";
+    } else {
+        // Hide the description box if there is no description
+        descElement.parentElement.style.display = "none";
+    }
+
+    modal.style.display = "flex";
+}
+
+function toggleModalSize() {
+    const modalContent = document.getElementById('modalContent');
+    const icon = document.getElementById('resizeIcon');
+    modalContent.classList.toggle('is-large');
+    icon.classList.toggle('fa-expand');
+    icon.classList.toggle('fa-compress');
+}
+
+function closeModal() {
+    const modal = document.getElementById('modalOverlay');
+    const video = document.getElementById('modalVideo');
+    if(video) { video.pause(); video.src = ""; }
+    modal.style.display = 'none';
+    document.getElementById('modalContent').classList.remove('is-large');
+    document.getElementById('resizeIcon').className = 'fa-solid fa-expand';
+}
+
+function toggleNames(btn) {
+    const hiddenContainer = btn.previousElementSibling;
+    if (hiddenContainer.style.display === "flex") {
+        hiddenContainer.style.display = "none";
+        btn.innerText = "+ " + hiddenContainer.children.length + " more";
+    } else {
+        hiddenContainer.style.display = "flex";
+        btn.innerText = "Show less";
+    }
+}
+
+/* CARD OPERATIONS */
+function getFileSrc(fileInput) { 
+    if (fileInput && fileInput.files && fileInput.files[0]) return URL.createObjectURL(fileInput.files[0]); 
+    return null; 
+}
+
+function deleteCard(cardId) { 
+    const card = document.getElementById(cardId);
+    const data = JSON.parse(card.getAttribute('data-raw'));
+    if(confirm("Are you sure you want to delete this record?")) {
+        card.remove();
+        updateNavButtons(data.gridId);
+    }
+    checkEmptySections();
+}
+
+function startEdit(cardId, section) {
+    currentEditingCardId = cardId;
+    const card = document.getElementById(cardId);
+    const data = JSON.parse(card.getAttribute('data-raw'));
+    let navSection = section;
+    if (section === 'activities') navSection = 'studentActivities';
+    if (section === 'achievements') navSection = 'studentAchievements';
+    if (section === 'other') navSection = 'otherActivities';
+    const navLink = document.querySelector(`li[data-section="${navSection}"]`);
+    if (navLink) navLink.click();
+    const formPageId = pages[navSection];
+    const form = document.querySelector(`#${formPageId} form`);
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if(submitBtn) submitBtn.innerText = "Update Record";
+
+    if (navSection === 'budget') {
+        form.budName.value = data.title; 
+        form.budAmt.value = data.fullDetails.Amount.replace('₹', '');
+        form.budDate.value = data.fullDetails.Date; 
+        form.budDesc.value = data.description;
+    } else if (navSection === 'events') {
+        form.evName.value = data.title; 
+        form.evOrg.value = data.fullDetails.Organizer;
+        form.evDate.value = data.fullDetails.Date; 
+        form.evVenue.value = data.fullDetails.Venue;
+        form.evBadge.value = data.fullDetails.Type; 
+        form.evDesc.value = data.description;
+    } else if (navSection === 'studentActivities') {
+        form.saNames.value = data.fullDetails.Students; 
+        form.saClass.value = data.fullDetails["Class/Year"];
+        form.saActivity.value = data.title; 
+        form.saType.value = data.fullDetails.Type;
+        form.saOrg.value = data.fullDetails.Organizer; 
+        form.saVenue.value = data.fullDetails.Venue;
+        form.saStart.value = data.fullDetails["Start Date"]; 
+        form.saEnd.value = data.fullDetails["End Date"];
+    } else if (navSection === 'studentAchievements') {
+        form.shNames.value = data.fullDetails.Winner; 
+        form.shClass.value = data.fullDetails["Class/Year"];
+        form.shEvent.value = data.fullDetails.Competition; 
+        form.shPrize.value = data.title;
+        form.shLevel.value = data.fullDetails.Level; 
+        form.shOrg.value = data.fullDetails.Organizer;
+        form.shVenue.value = data.fullDetails.Venue; 
+        form.shDate.value = data.fullDetails.Date;
+    } else if (navSection === 'otherActivities') {
+        form.oaNames.value = data.fullDetails.Participants; 
+        form.oaRole.value = data.fullDetails.Role;
+        form.oaActivity.value = data.title; 
+        form.oaType.value = data.fullDetails.Category;
+        form.oaOrg.value = data.fullDetails.Organizer; 
+        form.oaVenue.value = data.fullDetails.Venue;
+        form.oaStart.value = data.fullDetails["Start Date"]; 
+        form.oaEnd.value = data.fullDetails["End Date"];
+    } else if (navSection === 'gallery') {
+        form.galTitle.value = data.title; 
+        form.galDate.value = data.fullDetails.Date; 
+        form.galDesc.value = data.description;
+    } else if (navSection === 'videos') {
+        form.vidTitle.value = data.title; 
+        form.vidDate.value = data.fullDetails.Date; 
+        form.vidDesc.value = data.description;
+    }
+}
+
+function createCard(title, displayInfo, tag, gridId, mediaSrc, fullDetails, description) {
+    const grid = document.getElementById(gridId);
+    let card;
+    let isEditing = false;
+    if (currentEditingCardId) {
+        card = document.getElementById(currentEditingCardId);
+        isEditing = true;
+        const oldData = JSON.parse(card.getAttribute('data-raw'));
+        if (!mediaSrc) mediaSrc = oldData.mediaSrc;
+    } else {
+        card = document.createElement('div'); 
+        card.id = 'card-' + Date.now(); 
+        card.className = 'result-card card-wrapper';
+    }
+
+    const isVideo = (gridId === 'grid-videos');
+    const isAchievement = (gridId === 'grid-achievements');
+    const isActivityType = (gridId === 'grid-activities' || gridId === 'grid-other');
+    const sectionSlug = gridId.replace('grid-', '');
+    if (isAchievement) card.classList.add('achievement-card'); else card.classList.remove('achievement-card');
+
+    card.setAttribute('data-raw', JSON.stringify({title, tag, mediaSrc, fullDetails, description, gridId}));
+    
+    let updatedDisplayInfo = displayInfo;
+    if (isActivityType) {
+        const rawNames = (gridId === 'grid-activities') ? fullDetails.Students : fullDetails.Participants;
+        const namesArr = rawNames.split(/[\n,]+/).map(n => n.trim()).filter(n => n);
+        const displayNames = namesArr.length > 3 ? namesArr.slice(0, 3).join(', ') + " ....." : namesArr.join(', ');
+        updatedDisplayInfo = [`<i class="fa-solid fa-users"></i> ${displayNames}`, `<i class="fa-solid fa-building-columns"></i> ${fullDetails.Organizer}`, `<i class="fa-solid fa-location-dot"></i> ${fullDetails.Venue}`];
+    }
+    if (isAchievement) {
+        updatedDisplayInfo = [`<i class="fa-solid fa-user-graduate"></i> ${fullDetails.Winner}`, `<i class="fa-solid fa-award"></i> ${fullDetails.Competition}`, `<i class="fa-regular fa-calendar-check"></i> ${fullDetails.Date}`];
+    }
+
+    let contentHTML = `<h3>${title}</h3>${updatedDisplayInfo.map(d => `<p>${d}</p>`).join('')}`;
+    if (gridId === 'grid-budget') contentHTML += `<div class="budget-preview">${description.substring(0, 60)}...</div>`;
+
+    card.innerHTML = `
+        <div class="card-actions">
+            <button class="action-btn edit-btn" onclick="startEdit('${card.id}', '${sectionSlug}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn delete-btn" onclick="deleteCard('${card.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div class="card-img-container">
+            ${isVideo ? `<video src="${mediaSrc}"></video>` : `<img src="${mediaSrc || "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&w=600"}">`}
+            <div class="card-img-overlay"></div><span class="card-badge">${tag}</span>
+        </div>
+        <div class="card-content">${contentHTML}</div>
+        <div class="card-footer"><button class="view-details-btn">View Details</button><i class="fa-solid fa-arrow-right card-arrow"></i></div>
+    `;
+
+    card.querySelector('.view-details-btn').onclick = () => openFullPoster(title, mediaSrc, isVideo, fullDetails, description);
+    if (!isEditing) grid.prepend(card);
+    
+    currentEditingCardId = null; 
+    document.querySelector('[data-section="home"]').click();
+    setTimeout(() => updateNavButtons(gridId), 150);
+    checkEmptySections();
+}
+
+/* FORM SUBMISSIONS */
+document.getElementById('eventsForm').onsubmit = function(e) { e.preventDefault(); createCard(this.evName.value, [`<i class="fa-regular fa-calendar"></i> ${this.evDate.value}`, `<i class="fa-solid fa-location-dot"></i> ${this.evVenue.value}`], this.evBadge.value || 'Event', 'grid-events', getFileSrc(this.evImg), { "Organizer": this.evOrg.value, "Date": this.evDate.value, "Venue": this.evVenue.value, "Type": this.evBadge.value }, this.evDesc.value); this.reset(); };
+document.getElementById('studentActivitiesForm').onsubmit = function(e) { e.preventDefault(); createCard(this.saActivity.value, [], 'Activity', 'grid-activities', '', { "Students": this.saNames.value, "Class/Year": this.saClass.value, "Type": this.saType.value, "Participation": this.saPartType.value, "Organizer": this.saOrg.value, "Venue": this.saVenue.value, "Start Date": this.saStart.value, "End Date": this.saEnd.value }, ""); this.reset(); checkEmptySections(); };
+document.getElementById('studentAchievementsForm').onsubmit = function(e) { e.preventDefault(); createCard(this.shPrize.value, [], 'Award', 'grid-achievements', '', { "Winner": this.shNames.value, "Class/Year": this.shClass.value, "Competition": this.shEvent.value, "Level": this.shLevel.value, "Organizer": this.shOrg.value, "Venue": this.shVenue.value, "Date": this.shDate.value,"Certificate": getFileSrc(this.shPdf)}, ""); this.reset(); checkEmptySections(); };
+document.getElementById('galleryForm').onsubmit = function(e) { e.preventDefault(); createCard(this.galTitle.value, [`<i class="fa-regular fa-calendar"></i> ${this.galDate.value}`], 'Photo', 'grid-gallery', getFileSrc(this.galImg), { "Date": this.galDate.value }, this.galDesc.value); this.reset(); };
+document.getElementById('videosForm').onsubmit = function(e) { e.preventDefault(); createCard(this.vidTitle.value, [`<i class="fa-solid fa-circle-play"></i> ${this.vidDate.value}`], 'Video', 'grid-videos', getFileSrc(this.vidFile), { "Date": this.vidDate.value }, this.vidDesc.value); this.reset(); };
+document.getElementById('budgetForm').onsubmit = function(e) { e.preventDefault(); createCard(this.budName.value, [`<i class="fa-solid fa-indian-rupee-sign"></i> ₹${this.budAmt.value}`, `<i class="fa-regular fa-calendar"></i> ${this.budDate.value}`], 'Finance', 'grid-budget', '', { "Amount": `₹${this.budAmt.value}`, "Date": this.budDate.value }, this.budDesc.value); this.reset(); };
+
+function filterCards() { 
+    const q = document.getElementById('dashboardSearch').value.toLowerCase(); 
+    document.querySelectorAll('.card-wrapper').forEach(c => c.style.display = c.innerText.toLowerCase().includes(q) ? "flex" : "none"); 
+    document.querySelectorAll('.display-grid').forEach(g => updateNavButtons(g.id));
+}
+
+window.onload = () => {
+    document.querySelectorAll('.display-grid').forEach(g => updateNavButtons(g.id));
+    checkEmptySections();
+};
+
+function checkEmptySections() {
+    document.querySelectorAll('.display-grid').forEach(grid => {
+        const placeholder = grid.querySelector('.empty-placeholder');
+        const cardCount = grid.querySelectorAll('.result-card').length;
+        if (placeholder) {
+            placeholder.style.display = (cardCount === 0) ? 'flex' : 'none';
+        }
+    });
+}
+
+/* PROFILE OPERATIONS */
+function openProfilePopup() {
+    document.getElementById('profileEditModal').style.display = 'flex';
+    
+    // Pre-fill popup fields from current sidebar text
+    document.getElementById('inputName').value = document.getElementById('displayProfileName').innerText;
+    document.getElementById('inputEmail').value = document.getElementById('displayProfileEmail').innerText;
+    document.getElementById('inputClass').value = document.getElementById('displayProfileClass').innerText;
+    document.getElementById('inputRoll').value = document.getElementById('displayProfileRoll').innerText;
+}
+
+function closeProfilePopup() {
+    const modal = document.getElementById('profileEditModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function uploadProfileImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const avatarImg = document.getElementById('profileAvatarDisplay');
+            const placeholder = document.getElementById('avatarPlaceholder');
+            
+            // 1. Set the image source
+            avatarImg.src = e.target.result;
+            
+            // 2. Show the image and hide the icon placeholder
+            avatarImg.style.display = 'block';
+            placeholder.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function saveProfileDetails(event) {
+    event.preventDefault();
+    
+    // Update Sidebar
+    document.getElementById('displayProfileName').innerText = document.getElementById('inputName').value;
+    document.getElementById('displayProfileEmail').innerText = document.getElementById('inputEmail').value;
+    document.getElementById('displayProfileClass').innerText = document.getElementById('inputClass').value;
+    document.getElementById('displayProfileRoll').innerText = document.getElementById('inputRoll').value;
+    
+    document.getElementById('profileEditModal').style.display = 'none';
+    alert("Profile updated successfully!");
+}
+
+function closeModal() {
+    const modal = document.getElementById('modalOverlay');
+    modal.style.display = 'none';
+    // Reset video to stop playback
+    const modalVideo = document.getElementById('modalVideo');
+    if (modalVideo) modalVideo.src = "";
+}
+
+function toggleModalSize() {
+    const modalContent = document.getElementById('modalContent');
+    modalContent.classList.toggle('is-large');
+}
+
+// Also add this to close the modal if the user clicks outside the box
+window.onclick = function(event) {
+    const modal = document.getElementById('modalOverlay');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+</script>
+
+<div id="profileEditModal" class="modal-overlay">
+    <div class="modal-content profile-modal-content">
+        <span class="profile-modal-close" onclick="closeProfilePopup()">&times;</span>
+        
+        <div class="modal-header-area">
+            <h2 style="color: white;">Edit Profile</h2>
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 25px;">
+                Update your details to keep your profile current.
+            </p>
+        </div>
+
+        <form id="profileEditForm" onsubmit="saveProfileDetails(event)">
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="inputName" class="enhanced-input" placeholder="Full Name" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="inputEmail" class="enhanced-input" placeholder="Email Address" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="input-group">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <input type="text" id="inputClass" class="enhanced-input" placeholder="Year/Class" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-id-badge"></i>
+                    <input type="text" id="inputRoll" class="enhanced-input" placeholder="Roll No." required>
+                </div>
+            </div>
+
+            <input type="file" id="profilePhotoInput" style="display: none;" accept="image/*" onchange="handleProfilePhoto(event)">
+
+            <button type="submit" class="save-profile-btn">
+                <span>Save Changes</span>
+                <i class="fa-solid fa-check"></i>
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
